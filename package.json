@@ -4,8 +4,15 @@
   "description": "Collection of mixins and functions to use in projects",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomatau/tao-scss-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tomatau/tao-scss-app/issues"
+  },
+  "homepage": "https://github.com/tomatau/tao-scss-app#readme",
+  "author": "Thomas `tomatau` Hudspsith-Tatham",
+  "license": "MIT"
 }
