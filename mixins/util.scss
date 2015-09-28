@@ -1,0 +1,30 @@
+@mixin clearfix() {
+  *zoom:1; // IE
+  &:before,
+  &:after {
+    content: " "; // ie needs space, opera bug
+    display: table; // not block?
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+@mixin appearance($val) {
+  -webkit-appearance: $val;
+  -moz-appearance: $val;
+  appearance: $val;
+}
+
+@mixin placeholder($color) {
+  &::-moz-placeholder           { color: $color; }
+  &:-ms-input-placeholder       { color: $color; }
+  &::-webkit-input-placeholder  { color: $color; }
+}
+
+// opacity
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  $opacity-ie: ($opacity * 100);
+  filter: #{alpha(opacity=$opacity-ie)}; // IE 8
+}

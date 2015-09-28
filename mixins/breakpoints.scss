@@ -1,0 +1,24 @@
+$global-radius: 3px !default;
+
+@import "../functions/units";
+@import "../functions/list";
+@import "../functions/breakpoints";
+
+$breakpoints: (
+  palm    max(rem(480px)),
+  mobile  between(rem(481px), rem(768px)),
+  sm      min(rem(481px)),
+  tablet  between(rem(769px), rem(980px)),
+  md      min(rem(769px)),
+  laptop  between(rem(981px), rem(1023px)),
+  lg      min(rem(981px)),
+  desktop min(rem(1024px))
+) !default;
+
+// breakpoints
+@mixin breakpoint($point) {
+  $query: by-key($point, $breakpoints);
+  @media #{$query} {
+    @content
+  };
+}

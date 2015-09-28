@@ -1,0 +1,71 @@
+@mixin box-sizing($type: border-box) {
+  $type: unquote($type);
+  -moz-box-sizing: $type;
+  -webkit-box-sizing: $type;
+  box-sizing: $type;
+}
+
+@mixin flex($flow: row wrap){
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: flex;
+  -webkit-flex-flow: $flow;
+  -moz-flex-flow: $flow;
+  flex-flow: $flow;
+}
+
+@mixin nav-flex(){
+  @include flex;
+  position: static;
+  width: 100%;
+  li {
+    flex: 1;
+    min-width: 120px;
+    max-width: 240px;
+  }
+}
+
+@mixin box-shadow($vals...) {
+  -webkit-box-shadow: $vals;
+  -moz-box-shadow: $vals;
+  box-shadow: $vals;
+}
+
+@mixin size($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+@mixin square($size) {
+  @include size($size, $size);
+}
+
+
+@mixin radius($radius: $global-radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -o-border-radius: $radius;
+  border-radius: $radius;
+}
+
+// side-radius('left')
+// side-radius('top')
+@mixin side-radius($side, $radius: $global-radius) {
+  $side: unquote($side);
+  @if ($side == left or $side == right) {
+    -moz-border-radius-bottom#{$side}: $radius;
+    -moz-border-radius-top#{$side}: $radius;
+    -webkit-border-bottom-#{$side}-radius: $radius;
+    -webkit-border-top-#{$side}-radius: $radius;
+    border-bottom-#{$side}-radius: $radius;
+    border-top-#{$side}-radius: $radius;
+  } @else {
+    -moz-border-radius-#{$side}left: $radius;
+    -moz-border-radius-#{$side}right: $radius;
+    -webkit-border-#{$side}-left-radius: $radius;
+    -webkit-border-#{$side}-right-radius: $radius;
+    border-#{$side}-left-radius: $radius;
+    border-#{$side}-right-radius: $radius;
+  }
+}

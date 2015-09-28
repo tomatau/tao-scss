@@ -1,0 +1,192 @@
+/*------------------------------------*\
+  UNIT FUNCTIONS
+\*------------------------------------*/
+
+// Required Variables
+$rem-base: 16px !default;
+
+/*------------------------------------*\
+  STRIP UNITS
+\*------------------------------------*/
+// convert value to number from unit
+// strip-units(12px); /* returns 12 */
+// strip-units(4vh); /* returns 4 */
+@function strip-units($num) {
+  @return $num / ($num * 0 + 1);
+}
+
+/*------------------------------------*\
+  CLAMP
+\*------------------------------------*/
+// restrict number between 2 values
+// clamp(13, 4, 6); /* returns 6 */
+// clamp(3, 4, 6); /* returns 4 */
+@function clamp($value, $min, $max) {
+  @return if(
+    $value > $max,
+    $max,
+    if($value < $min, $min, $value)
+  );
+}
+
+/*------------------------------------*\
+  CONVERT TO REM
+\*------------------------------------*/
+// change a px value into rem
+// specify a different base if not px
+// convert-to-rem(16px); /* returns 1rem */
+@function convert-to-rem($value, $base: $rem-base)  {
+  $value: strip-units($value) / strip-units($base) * 1rem;
+  @if ($value == 0rem) { $value: 0; } // Turn 0rem into 0
+  @return $value;
+}
+
+/*------------------------------------*\
+  REM
+\*------------------------------------*/
+// shorthand convert to rem
+// also changes all values in list
+// call with 1 value, list and optional base
+// rem-calc(16px 48px 32px); /* 1rem 3rem 2rem */
+// rem-calc((16, 48, 32, 8px)); /* 1rem 3rem 2rem 0.5rem */
+// rem-calc(16px 48px 32px, 8px); /* 2rem 6rem42rem */
+@function rem($values, $base-value: $rem-base) {
+  $max: length($values);
+  @if $max == 1 {
+    @return convert-to-rem(
+      nth($values, 1), $base-value
+    );
+  }
+  $remValues: ();
+  @for $i from 1 through $max {
+    $remValues: append(
+      $remValues,
+      convert-to-rem(nth($values, $i), $base-value)
+    );
+  }
+  @return $remValues;
+}
+
+/*------------------------------------*\
+  CONVERT ANGLE
+\*------------------------------------*/
+// http://codepen.io/HugoGiraudel/pen/rdgse
+@function convert-angle($value, $unit) {
+  $convertable-units: deg grad turn rad;
+  $conversion-factors: 1 10grad/9deg 1turn/360deg 3.1415926rad/180deg;
+  @if index($convertable-units, unit($value))
+  and index($convertable-units, $unit) {
+    @return $value
+       / nth(
+          $conversion-factors,
+          index($convertable-units, unit($value))
+        )
+       * nth(
+          $conversion-factors,
+          index($convertable-units, $unit)
+        );
+  } @else {
+    @warn "Cannot convert #{unit($value)} to #{$unit}";
+  }
+}
+
+/*------------------------------------*\
+  TO UNIT
+\*------------------------------------*/
+// helper for automating unit conversion or error
+// to-unit(12, 'px'); /* 12px */
+@function to-unit($number, $unit) {
+  $strings: 'px' 'cm' 'mm' '%' 'ch' 'pica' 'in' 'em' 'rem' 'pt' 'pc' 'ex' 'vw' 'vh' 'vmin' 'vmax';
+  $units:   1px  1cm  1mm  1%  1ch  1pica  1in  1em  1rem  1pt  1pc  1ex  1vw  1vh  1vmin  1vmax;
+  $index: index($strings, $unit);
+  @if not $index {
+    @warn "Unknown unit `#{$unit}`.";
+    @return false;
+  }
+  @return $number * nth($units, $index);
+}
+
+/*------------------------------------*\
+  TO NUMBER
+\*------------------------------------*/
+// concerts a string to a number
+// to-number("12"); /* returns 12 */
+@function to-number($string) {
+  $strings: '0' '1' '2' '3' '4' '5' '6' '7' '8' '9';
+  $numbers:  0   1   2   3   4   5   6   7   8   9;
+  $result: 0;
+  $divider: 0;
+  $minus: false;
+  @for $i from 1 through str-length($string) {
+    $character: str-slice($string, $i, $i);
+    $index: index($strings, $character);
+    @if $character == '-' { $minus: true; }
+    @else if $character == '.' { $divider: 1; }
+    @else {
+      @if not $index {
+        $result: if($minus, $result * -1, $result);
+        @return _length($result, str-slice($string, $i));
+      }
+      $number: nth($numbers, $index);
+      @if $divider == 0 { $result: $result * 10; }
+      @else {
+        $divider: $divider * 10;
+        $number: $number / $divider;
+      }
+      $result: $result + $number;
+    }
+  }
+  @return if($minus, $result * -1, $result);
+}
+
+/*------------------------------------*\
+  RGBSTR TO COLOR
+\*------------------------------------*/
+// given an rgb string, converts to a color
+// rgbstr-to-color(123,23,4,0.2); /* returns color object */
+@function rgbstring-to-color($rgbString){
+  $length: str-length($rgbString);
+  $gotRed: false;
+  $gotGreen: false;
+  $red: null;
+  $green: null;
+  $blue: null;
+  $alpha: null;
+  @for $i from 1 through $length {
+    $token: str-slice($rgbString, $i, $i);
+    @if $token == ',' {
+      @if $gotRed {
+        @if $gotGreen {
+          $gotBlue: true;
+        } @else {
+          $gotGreen: true;
+        }
+      } @else {
+        $gotRed: true;
+      }
+      // @continue;
+    } @else if $token == ' ' {
+      // @continue
+    } @else {
+      @if $gotRed {
+        @if $gotGreen {
+          @if $gotBlue {
+            $alpha: "#{$alpha}#{$token}";
+          } @else {
+            $blue: "#{$blue}#{$token}";
+          }
+        } @else {
+          $green: "#{$green}#{$token}";
+        }
+      } @else {
+        $red: "#{$red}#{$token}";
+      }
+    }
+  }
+  @return rgb(
+    number($red),
+    number($green),
+    number($blue),
+    if($alpha, $alpha, 1);
+  );
+}

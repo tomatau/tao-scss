@@ -1,0 +1,24 @@
+
+/// Generates the given property with a `linear-gradient` value
+/// as well as each necessary vendor prefix for that value.
+///
+/// @param {String} $property - The property to generate.
+/// @param $vals... - The value(s) to pass to the `linear-gradient` function.
+///
+/// @example
+///   // Usage:
+///   @include linear-gradient(background, left, #ff0 0%, #f00 50%, #000 51%, #222 71%, #fff 100%)
+///
+///   // Output:
+///   background: -webkit-linear-gradient(left, #ff0 0%, #f00 50%, #000 51%, #222 71%, #fff 100%);
+///   background: -moz-linear-gradient(left, #ff0 0%, #f00 50%, #000 51%, #222 71%, #fff 100%);
+///   background: -ms-linear-gradient(left, #ff0 0%, #f00 50%, #000 51%, #222 71%, #fff 100%);
+///   background: -o-linear-gradient(left, #ff0 0%, #f00 50%, #000 51%, #222 71%, #fff 100%);
+///   background: linear-gradient(left, #ff0 0%, #f00 50%, #000 51%, #222 71%, #fff 100%);
+@mixin linear-gradient($property, $vals...) {
+  #{$property}: -webkit-linear-gradient($vals);
+  #{$property}: -moz-linear-gradient($vals);
+  #{$property}: -ms-linear-gradient($vals);
+  #{$property}: -o-linear-gradient($vals);
+  #{$property}: linear-gradient($vals);
+}

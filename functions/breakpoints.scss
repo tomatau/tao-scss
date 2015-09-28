@@ -1,0 +1,15 @@
+/*------------------------------------*\
+  BREAKPOINTS
+\*------------------------------------*/
+
+@function min($size){
+  @return "(min-width: #{$size})";
+}
+
+@function max($size){
+  @return "(max-width: #{$size})";
+}
+
+@function between($min, $max){
+  @return "(min-width: #{$min}) and (max-width: #{$max})";
+}

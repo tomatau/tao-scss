@@ -1,0 +1,56 @@
+/*------------------------------------*\
+  LIST FUNCTIONS
+\*------------------------------------*/
+
+/*------------------------------------*\
+  KEY BY VALUE
+\*------------------------------------*/
+// get list key by value
+// $list = (1 'foo', 2 'bar');
+// by-value($list, 'bar'); /* returns 2 */
+@function key-by-value($target, $list){
+  @each $item in $list {
+    $key: nth($item, 1);
+    $value: nth($item, 2);
+    @if ($value == $target) {
+      @return $key;
+    }
+  }
+  @return "";
+}
+
+/*------------------------------------*\
+  VALUE BY KEY
+\*------------------------------------*/
+// get list value by key
+// $list = ('foo' 1, 'bar' 2);
+// by-value($list, 'bar'); /* returns 2 */
+@function value-by-key($target, $list){
+  @each $item in $list {
+    $key: nth($item, 1);
+    $value: nth($item, 2);
+    @if ($key == $target) {
+      @return $value;
+    }
+  }
+  @return "";
+}
+
+/*------------------------------------*\
+  MATCH
+\*------------------------------------*/
+// get either the key or value by it's friend
+// $list: a b, c d, e f;
+// $value: match($list, e); /* returns f */
+// $value: match($list, b); /* returns a */
+// $value: match($list, z); /* returns false */
+@function match($haystack, $needle) {
+  @each $item in $haystack {
+    $index: index($item, $needle);
+    @if $index {
+      $return: if($index == 1, 2, $index);
+      @return nth($item, $return);
+    }
+  }
+  @return false;
+}

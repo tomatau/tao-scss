@@ -1,0 +1,41 @@
+@mixin font-smoothing($val) {
+  $moz-val: $val;
+
+  @if ($val == antialiased) {
+    $moz-val: grayscale;
+  } @else if ($val != none) {
+    $moz-val: auto;
+  }
+
+  -webkit-font-smoothing: $val;
+  -moz-osx-font-smoothing: $moz-val;
+}
+
+@mixin font-family-src($font-family, $file-path) {
+  font: {
+    family: $font-family;
+    weight: normal;
+    style: normal;
+  }
+  src: url('#{$file-path}.eot');
+  src: url('#{$file-path}.eot?#iefix')          format('embedded-opentype'),
+    url('#{$file-path}.woff')                 format('woff'),
+    url('#{$file-path}.ttf')                  format('truetype'),
+    url('#{$file-path}.svg##{$font-family}')  format('svg');
+}
+
+
+@mixin font-face($family, $font-url) {
+  @include font-family-src($family, $font-url);
+}
+
+/// Generates the property `text-size-adjust` as well as each necessary
+/// vendor prefix.
+///
+/// @param $val - The value of the text-size-adjust property.
+@mixin text-size-adjust($val) {
+  -webkit-text-size-adjust: $val;
+  -moz-text-size-adjust: $val;
+  -ms-text-size-adjust: $val;
+  text-size-adjust: $val;
+}
