@@ -77,14 +77,14 @@ $rem-base: 16px !default;
   @if index($convertable-units, unit($value))
   and index($convertable-units, $unit) {
     @return $value
-       / nth(
-          $conversion-factors,
-          index($convertable-units, unit($value))
-        )
-       * nth(
-          $conversion-factors,
-          index($convertable-units, $unit)
-        );
+    / nth(
+      $conversion-factors,
+      index($convertable-units, unit($value))
+    )
+    * nth(
+      $conversion-factors,
+      index($convertable-units, $unit)
+    );
   } @else {
     @warn "Cannot convert #{unit($value)} to #{$unit}";
   }
@@ -97,7 +97,7 @@ $rem-base: 16px !default;
 // to-unit(12, 'px'); /* 12px */
 @function to-unit($number, $unit) {
   $strings: 'px' 'cm' 'mm' '%' 'ch' 'pica' 'in' 'em' 'rem' 'pt' 'pc' 'ex' 'vw' 'vh' 'vmin' 'vmax';
-  $units:   1px  1cm  1mm  1%  1ch  1pica  1in  1em  1rem  1pt  1pc  1ex  1vw  1vh  1vmin  1vmax;
+  $units:  1px 1cm 1mm 1% 1ch 1pica 1in 1em 1rem 1pt 1pc 1ex 1vw 1vh 1vmin 1vmax;
   $index: index($strings, $unit);
   @if not $index {
     @warn "Unknown unit `#{$unit}`.";
@@ -190,4 +190,62 @@ $rem-base: 16px !default;
     to-number($blue),
     if($alpha, to-number($alpha), 1)
   );
+}
+
+
+/*------------------------------------*\
+  Num To String
+\*------------------------------------*/
+@function num-to-string($int) {
+  // set up lists
+  $ones: "one","two","three","four","five","six","seven","eight","nine";
+  $teens: "eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen";
+  $tens: "","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety";
+
+  $int: abs($int); // no nonnegative numbers
+  $number: "";
+  $temp: $int / 10;
+  $temp: floor($temp);
+  @if($int >= 1 and $int <= 100) {
+    @if($temp < 1) { // it's a one!
+      $number: nth($ones, $int % 10);
+    }
+    @if($temp == 1) { // in the teen range
+      @if($int % 10 == 0) {
+        $number: "ten";
+      } @else {
+        $number: nth($teens, $int % 10);
+      }
+    }
+    @if($temp >= 2 and $temp <= 9) { // more than our teens
+      @if($int % 10 == 0) {
+        // means it's a number evenly divisible by 10
+        $number: nth($tens, $int / 10);
+      } @else {
+        $number: "#{nth($tens, floor($int / 10))}-#{nth($ones, $int % 10)}";
+      }
+    }
+    @if($temp == 10) { // this is the end...
+      $number: "one-hundred";
+    }
+  } @else {
+    $number: "Invalid parameter passed. Number must be between 1 and 100."
+  }
+  @return $number;
+}
+
+/*------------------------------------*\
+  List to string
+\*------------------------------------*/
+@function list-to-string($list, $glue: '', $is-nested: false) {
+  $result: null;
+  @for $i from 1 through length($list) {
+    $e: nth($list, $i);
+    @if type-of($e) == list {
+      $result: $result#{to-string($e, $glue, true)};
+    } @else {
+      $result: if($i != length($list) or $is-nested, $result#{$e}#{$glue}, $result#{$e});
+    }
+  }
+  @return $result;
 }
