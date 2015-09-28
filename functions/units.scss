@@ -148,6 +148,7 @@ $rem-base: 16px !default;
   $length: str-length($rgbString);
   $gotRed: false;
   $gotGreen: false;
+  $gotBlue: false;
   $red: null;
   $green: null;
   $blue: null;
@@ -183,10 +184,10 @@ $rem-base: 16px !default;
       }
     }
   }
-  @return rgb(
-    number($red),
-    number($green),
-    number($blue),
-    if($alpha, $alpha, 1);
+  @return rgba(
+    to-number($red),
+    to-number($green),
+    to-number($blue),
+    if($alpha, to-number($alpha), 1)
   );
 }
