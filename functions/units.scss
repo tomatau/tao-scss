@@ -125,7 +125,7 @@ $rem-base: 16px !default;
     @else {
       @if not $index {
         $result: if($minus, $result * -1, $result);
-        @return _length($result, str-slice($string, $i));
+        @return to-unit($result, str-slice($string, $i));
       }
       $number: nth($numbers, $index);
       @if $divider == 0 { $result: $result * 10; }
