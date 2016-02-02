@@ -1,13 +1,13 @@
-/*------------------------------------*\
-  UNIT FUNCTIONS
-\*------------------------------------*/
+//------------------------------------*\
+//  UNIT FUNCTIONS
+//------------------------------------*/
 
 // Required Variables
 $rem-base: 16px !default;
 
-/*------------------------------------*\
-  STRIP UNITS
-\*------------------------------------*/
+//------------------------------------*\
+//  STRIP UNITS
+//------------------------------------*/
 // convert value to number from unit
 // strip-units(12px); /* returns 12 */
 // strip-units(4vh); /* returns 4 */
@@ -15,9 +15,9 @@ $rem-base: 16px !default;
   @return $num / ($num * 0 + 1);
 }
 
-/*------------------------------------*\
-  CLAMP
-\*------------------------------------*/
+//------------------------------------*\
+//  CLAMP
+//------------------------------------*/
 // restrict number between 2 values
 // clamp(13, 4, 6); /* returns 6 */
 // clamp(3, 4, 6); /* returns 4 */
@@ -29,9 +29,9 @@ $rem-base: 16px !default;
   );
 }
 
-/*------------------------------------*\
-  CONVERT TO REM
-\*------------------------------------*/
+//------------------------------------*\
+//  CONVERT TO REM
+//------------------------------------*/
 // change a px value into rem
 // specify a different base if not px
 // convert-to-rem(16px); /* returns 1rem */
@@ -41,9 +41,9 @@ $rem-base: 16px !default;
   @return $value;
 }
 
-/*------------------------------------*\
-  REM
-\*------------------------------------*/
+//------------------------------------*\
+//  REM
+//------------------------------------*/
 // shorthand convert to rem
 // also changes all values in list
 // call with 1 value, list and optional base
@@ -67,9 +67,9 @@ $rem-base: 16px !default;
   @return $remValues;
 }
 
-/*------------------------------------*\
-  CONVERT ANGLE
-\*------------------------------------*/
+//------------------------------------*\
+//  CONVERT ANGLE
+//------------------------------------*/
 // http://codepen.io/HugoGiraudel/pen/rdgse
 @function convert-angle($value, $unit) {
   $convertable-units: deg grad turn rad;
@@ -90,9 +90,9 @@ $rem-base: 16px !default;
   }
 }
 
-/*------------------------------------*\
-  TO UNIT
-\*------------------------------------*/
+//------------------------------------*\
+//  TO UNIT
+//------------------------------------*/
 // helper for automating unit conversion or error
 // to-unit(12, 'px'); /* 12px */
 @function to-unit($number, $unit) {
@@ -106,9 +106,9 @@ $rem-base: 16px !default;
   @return $number * nth($units, $index);
 }
 
-/*------------------------------------*\
-  TO NUMBER
-\*------------------------------------*/
+//------------------------------------*\
+//  TO NUMBER
+//------------------------------------*/
 // concerts a string to a number
 // to-number("12"); /* returns 12 */
 @function to-number($string) {
@@ -139,9 +139,9 @@ $rem-base: 16px !default;
   @return if($minus, $result * -1, $result);
 }
 
-/*------------------------------------*\
-  RGBSTR TO COLOR
-\*------------------------------------*/
+//------------------------------------*\
+//  RGBSTR TO COLOR
+//------------------------------------*/
 // given an rgb string, converts to a color
 // rgbstr-to-color(123,23,4,0.2); /* returns color object */
 @function rgbstring-to-color($rgbString){
@@ -193,9 +193,9 @@ $rem-base: 16px !default;
 }
 
 
-/*------------------------------------*\
-  Num To String
-\*------------------------------------*/
+//------------------------------------*\
+//  Num To String
+//------------------------------------*/
 @function num-to-string($int) {
   // set up lists
   $ones: "one","two","three","four","five","six","seven","eight","nine";
@@ -234,9 +234,9 @@ $rem-base: 16px !default;
   @return $number;
 }
 
-/*------------------------------------*\
-  List to string
-\*------------------------------------*/
+//------------------------------------*\
+// List to string
+//------------------------------------*/
 @function list-to-string($list, $glue: '', $is-nested: false) {
   $result: null;
   @for $i from 1 through length($list) {
