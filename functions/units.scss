@@ -3,7 +3,7 @@
 //------------------------------------*/
 
 // Required Variables
-$rem-base: 16px !default;
+$context-unit: 16px !default;
 
 //------------------------------------*\
 //  STRIP UNITS
@@ -35,9 +35,21 @@ $rem-base: 16px !default;
 // change a px value into rem
 // specify a different base if not px
 // convert-to-rem(16px); /* returns 1rem */
-@function convert-to-rem($value, $base: $rem-base)  {
+@function convert-to-rem($value, $base: $context-unit)  {
   $value: strip-units($value) / strip-units($base) * 1rem;
   @if ($value == 0rem) { $value: 0; } // Turn 0rem into 0
+  @return $value;
+}
+
+//------------------------------------*\
+//  CONVERT TO EM
+//------------------------------------*/
+// change a px value into em
+// specify a different base if not px
+// convert-to-em(16px); /* returns 1em */
+@function convert-to-em($value, $base: $context-unit)  {
+  $value: strip-units($value) / strip-units($base) * 1em;
+  @if ($value == 0em) { $value: 0; } // Turn 0rem into 0
   @return $value;
 }
 
@@ -47,10 +59,10 @@ $rem-base: 16px !default;
 // shorthand convert to rem
 // also changes all values in list
 // call with 1 value, list and optional base
-// rem-calc(16px 48px 32px); /* 1rem 3rem 2rem */
-// rem-calc((16, 48, 32, 8px)); /* 1rem 3rem 2rem 0.5rem */
-// rem-calc(16px 48px 32px, 8px); /* 2rem 6rem42rem */
-@function rem($values, $base-value: $rem-base) {
+// rem(16px 48px 32px); /* 1rem 3rem 2rem */
+// rem((16, 48, 32, 8px)); /* 1rem 3rem 2rem 0.5rem */
+// rem(16px 48px 32px, 8px); /* 2rem 6rem 42rem */
+@function rem($values, $base-value: $context-unit) {
   $max: length($values);
   @if $max == 1 {
     @return convert-to-rem(
@@ -65,6 +77,32 @@ $rem-base: 16px !default;
     );
   }
   @return $remValues;
+}
+
+//------------------------------------*\
+//  EM
+//------------------------------------*/
+// shorthand convert to em
+// also changes all values in list
+// call with 1 value, list and optional base
+// em-calc(16px 48px 32px); /* 1em 3em 2em */
+// em-calc((16, 48, 32, 8px)); /* 1em 3em 2em 0.5em */
+// em-calc(16px 48px 32px, 8px); /* 2em 6em 42em */
+@function em($values, $base-value: $context-unit) {
+  $max: length($values);
+  @if $max == 1 {
+    @return convert-to-em(
+      nth($values, 1), $base-value
+    );
+  }
+  $emValues: ();
+  @for $i from 1 through $max {
+    $emValues: append(
+      $emValues,
+      convert-to-em(nth($values, $i), $base-value)
+    );
+  }
+  @return $emValues;
 }
 
 //------------------------------------*\
